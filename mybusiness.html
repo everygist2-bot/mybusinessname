@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mybusinessname.com | Company Name Generator</title>
+    <meta name="description" content="Free company name generator - Create unique business names instantly. Save favorites, check domains, and get inspired.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-top: 70px; /* For sticky header */
+        }
+
+        /* Sticky Header */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .logo p {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .menu-icon {
+            font-size: 1.75rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .menu-icon:hover {
+            background: #f3f4f6;
+        }
+
+        /* Side Menu Overlay */
+        .side-menu-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .side-menu-overlay.open {
+            right: 0;
+        }
+
+        .overlay-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .overlay-bg.active {
+            display: block;
+        }
+
+        .menu-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-menu {
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0.25rem;
+        }
+
+        .menu-links {
+            padding: 1rem;
+        }
+
+        .menu-links a {
+            display: block;
+            padding: 1rem;
+            color: #1f2937;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        .menu-links a:hover {
+            background: #f3f4f6;
+            color: #667eea;
+        }
+
+        /* Main Container */
+        .container {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto 2rem auto;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .generator-card {
+            background: #f9fafb;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .name-display {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border: 2px dashed #e5e7eb;
+        }
+
+        .company-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: -0.02em;
+            word-break: break-word;
+        }
+
+        @media (max-width: 640px) {
+            .company-name {
+                font-size: 1.75rem;
+            }
+            .container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .secondary-btn {
+            flex: 1;
+            background: white;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #4b5563;
+        }
+
+        .secondary-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: #fef9ff;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .industry-selector {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .industry-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #4b5563;
+        }
+
+        .industry-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+        }
+
+        .saved-names {
+            background: #f9fafb;
+            border-radius: 1rem;
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .saved-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: white;
+            margin-bottom: 0.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .remove-saved {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0 0.5rem;
+        }
+
+        .domain-check {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #f3f4f6;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .domain-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0 0.5rem;
+        }
+
+        /* Blog Section */
+        .blog-section {
+            background: white;
+            border-radius: 2rem;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto 2rem auto;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .blog-card {
+            background: #f9fafb;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            transition: transform 0.2s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .blog-card h3 {
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #9ca3af;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .footer-section a:hover {
+            color: #667eea;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        /* Cookie Notice */
+        .cookie-notice {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1f2937;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            z-index: 999;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .cookie-notice.show {
+            transform: translateY(0);
+        }
+
+        .cookie-notice p {
+            font-size: 0.875rem;
+        }
+
+        .cookie-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .cookie-settings {
+            background: none;
+            border: 1px solid #6b7280;
+            color: #d1d5db;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .cookie-notice {
+                flex-direction: column;
+                text-align: center;
+            }
+            .sticky-header {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sticky Header -->
+<div class="sticky-header">
+    <div class="logo">
+        <h2>mybusinessname.com</h2>
+        <p>Company Name Generator</p>
+    </div>
+    <button class="menu-icon" id="menuToggle">☰</button>
+</div>
+
+<!-- Side Menu Overlay -->
+<div class="overlay-bg" id="overlayBg"></div>
+<div class="side-menu-overlay" id="sideMenu">
+    <div class="menu-header">
+        <h3>Menu</h3>
+        <button class="close-menu" id="closeMenu">✕</button>
+    </div>
+    <div class="menu-links">
+        <a href="#" id="contactLink">📧 Contact Us</a>
+        <a href="#" id="aboutLink">ℹ️ About</a>
+        <a href="#" id="privacyLink">🔒 Privacy Policy</a>
+        <a href="#" id="termsLink">📜 Terms of Use</a>
+        <a href="#" id="closeMenuBottom">← Back to Generator</a>
+    </div>
+</div>
+
+<!-- Main Generator -->
+<div class="container">
+    <h1>🏢 Company Name Generator</h1>
+    <div class="subtitle">Generate creative, unique business names instantly</div>
+
+    <div class="generator-card">
+        <div class="name-display">
+            <div class="company-name" id="companyName">VelocityForge Labs</div>
+        </div>
+        <button class="generate-btn" id="generateBtn">✨ Generate New Name</button>
+        <div class="action-buttons">
+            <button class="secondary-btn" id="saveBtn">💾 Save This Name</button>
+            <button class="secondary-btn" id="copyBtn">📋 Copy to Clipboard</button>
+        </div>
+        
+        <div class="domain-check" id="domainCheck">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                <a href="#" id="domainLink" class="domain-link" target="_blank" rel="sponsored">
+                    🌐 Check .com on Namecheap
+                </a>
+                <a href="#" id="domainLinkIo" class="domain-link" target="_blank" rel="sponsored">
+                    🚀 Get .io on Namecheap
+                </a>
+                <a href="#" id="domainLinkAi" class="domain-link" target="_blank" rel="sponsored">
+                    🤖 Try .ai domain
+                </a>
+            </div>
+            <div style="font-size: 0.7rem; margin-top: 0.5rem; color: #9ca3af;">
+                🔗 Affiliate links support this free tool
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">🎯 Select Industry</div>
+    <div class="industry-selector" id="industrySelector">
+        <button data-industry="tech" class="industry-btn active">Tech / SaaS</button>
+        <button data-industry="finance" class="industry-btn">Finance / Crypto</button>
+        <button data-industry="creative" class="industry-btn">Creative / Media</button>
+        <button data-industry="health" class="industry-btn">Health / Wellness</button>
+        <button data-industry="green" class="industry-btn">Green / Sustainability</button>
+        <button data-industry="food" class="industry-btn">Food / Beverage</button>
+    </div>
+
+    <div class="section-title">⭐ Saved Names <button class="clear-btn" id="clearSavedBtn">Clear all</button></div>
+    <div class="saved-names" id="savedNamesList">
+        <div class="empty-saved">No saved names yet. Click "Save" on a name you like!</div>
+    </div>
+</div>
+
+<!-- Open Blog Section (not behind a link) -->
+<div class="blog-section">
+    <h2 style="margin-bottom: 1rem;">📝 Latest from Our Blog</h2>
+    <div class="blog-grid">
+        <div class="blog-card">
+            <h3>How to Choose a Memorable Business Name</h3>
+            <p>Learn the psychology behind brand names that stick. From sound symbolism to visual recall, discover what makes a name unforgettable...</p>
+            <a href="#" class="read-more" onclick="alert('Full article coming soon!'); return false;">Read more →</a>
+        </div>
+        <div class="blog-card">
+            <h3>5 Naming Trends Dominating 2026</h3>
+            <p>From AI-inspired names to vintage revivals, see what's hot in company naming this year. Plus: which trends to avoid for longevity...</p>
+            <a href="#" class="read-more" onclick="alert('Full article coming soon!'); return false;">Read more →</a>
+        </div>
+        <div class="blog-card">
+            <h3>Domain Strategy: .com vs .io vs .ai</h3>
+            <p>Which TLD is right for your business? We compare SEO impact, user trust, and availability to help you decide...</p>
+            <a href="#" class="read-more" onclick="alert('Full article coming soon!'); return false;">Read more →</a>
+        </div>
+        <div class="blog-card">
+            <h3>How to Trademark Your Business Name</h3>
+            <p>A step-by-step guide to protecting your brand. Learn about USPTO searches, filing costs, and common pitfalls to avoid...</p>
+            <a href="#" class="read-more" onclick="alert('Full article coming soon!'); return false;">Read more →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>mybusinessname.com</h4>
+            <a href="#" id="footerContact">Contact</a>
+            <a href="#" id="footerAbout">About</a>
+            <a href="#" id="footerPrivacy">Privacy Policy</a>
+            <a href="#" id="footerTerms">Terms of Use</a>
+        </div>
+        <div class="footer-section">
+            <h4>Tools</h4>
+            <a href="#">Name Generator</a>
+            <a href="#">Domain Checker</a>
+            <a href="#">Brand Checklist</a>
+            <a href="#">Logo Ideas</a>
+        </div>
+        <div class="footer-section">
+            <h4>Resources</h4>
+            <a href="#">Naming Guide</a>
+            <a href="#">Blog</a>
+            <a href="#">Affiliate Disclosure</a>
+            <a href="#">Sitemap</a>
+        </div>
+        <div class="footer-section">
+            <h4>Connect</h4>
+            <a href="#">Twitter</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Newsletter</a>
+        </div>
+    </div>
+    <div class="copyright">
+        © 2026 mybusinessname.com - Free Company Name Generator. All rights reserved.
+    </div>
+</footer>
+
+<!-- Cookie Notice -->
+<div class="cookie-notice" id="cookieNotice">
+    <p>🍪 We use cookies to improve your experience and analyze traffic. You can customize your preferences.</p>
+    <div>
+        <button class="cookie-btn" id="acceptCookies">Accept All</button>
+        <button class="cookie-settings" id="cookieSettings">Preferences</button>
+        <button class="cookie-settings" id="declineCookies">Decline Non-Essential</button>
+    </div>
+</div>
+
+<script>
+    // ========== AFFILIATE CONFIGURATION ==========
+    // REPLACE WITH YOUR NAMECHEAP AFFILIATE ID
+    const NAMECHEAP_AFF_ID = 'YOUR_AFFILIATE_ID_HERE'; // <-- PUT YOUR ID HERE
+    
+    // ========== COMPANY NAME GENERATOR LOGIC ==========
+    const wordBanks = {
+        tech: {
+            prefixes: ['Smart', 'NextGen', 'Digital', 'Cloud', 'Data', 'Code', 'Cyber', 'Neural', 'Quantum', 'Agile'],
+            roots: ['Tech', 'Soft', 'Ware', 'Logic', 'Sys', 'Byte', 'Pixel', 'Stack', 'Dev', 'Compute'],
+            suffixes: ['Labs', 'Studio', 'Solutions', 'Systems', 'AI', 'Innovations', 'Digital', 'Hub', 'Works', 'HQ']
+        },
+        finance: {
+            prefixes: ['Secure', 'Global', 'Capital', 'Wealth', 'Prime', 'Apex', 'Trust', 'Equity', 'Nexus', 'Fiscal'],
+            roots: ['Finance', 'Ledger', 'Asset', 'Capital', 'Vault', 'Coin', 'Trade', 'Holdings', 'Reserve', 'Market'],
+            suffixes: ['Group', 'Partners', 'Capital', 'Advisory', 'Trust', 'Bank', 'Wealth', 'Ventures', 'Fund', 'Exchange']
+        },
+        creative: {
+            prefixes: ['Bold', 'Bright', 'Pure', 'Wild', 'Blank', 'Fresh', 'Radical', 'Studio', 'Art', 'Vivid'],
+            roots: ['Media', 'Creative', 'Story', 'Design', 'Pixel', 'Canvas', 'Frame', 'Muse', 'Spark', 'Idea'],
+            suffixes: ['Studio', 'Collective', 'Agency', 'House', 'Lab', 'Workshop', 'Creative', 'Co', 'Atelier', 'Press']
+        },
+        health: {
+            prefixes: ['Vital', 'Pure', 'Active', 'Well', 'Mindful', 'Holistic', 'Revive', 'Zen', 'Core', 'Balance'],
+            roots: ['Health', 'Wellness', 'Life', 'Care', 'Vitality', 'Therapy', 'Med', 'Fit', 'Nurture', 'Thrive'],
+            suffixes: ['Clinic', 'Wellness', 'Health', 'Center', 'Care', 'Institute', 'Life', 'Solutions', 'MD', 'Therapeutics']
+        },
+        green: {
+            prefixes: ['Eco', 'Green', 'Pure', 'Solar', 'Earth', 'Native', 'Sustainable', 'Clean', 'Renew', 'Forest'],
+            roots: ['Energy', 'Earth', 'Green', 'Eco', 'Cycle', 'Garden', 'Planet', 'Nature', 'Verdant', 'Terra'],
+            suffixes: ['Solutions', 'Energy', 'Collective', 'Earth', 'Green', 'Eco', 'Labs', 'Initiative', 'Power', 'Sustain']
+        },
+        food: {
+            prefixes: ['Fresh', 'Pure', 'Local', 'Harvest', 'Spice', 'Golden', 'Rustic', 'Taste', 'Artisan', 'Kitchen'],
+            roots: ['Food', 'Flavor', 'Brew', 'Grain', 'Table', 'Plate', 'Spoon', 'Bite', 'Harvest', 'Pantry'],
+            suffixes: ['Kitchen', 'Co', 'Eatery', 'Bakery', 'Brewery', 'Provisions', 'Table', 'Goods', 'Cafe', 'Deli']
+        }
+    };
+
+    let currentIndustry = 'tech';
+    let currentName = 'VelocityForge Labs';
+    let savedNames = loadSavedNames();
+
+    // DOM elements
+    const companyNameEl = document.getElementById('companyName');
+    const generateBtn = document.getElementById('generateBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearSavedBtn = document.getElementById('clearSavedBtn');
+    const savedNamesListEl = document.getElementById('savedNamesList');
+    const domainLink = document.getElementById('domainLink');
+    const domainLinkIo = document.getElementById('domainLinkIo');
+    const domainLinkAi = document.getElementById('domainLinkAi');
+
+    function loadSavedNames() {
+        const saved = localStorage.getItem('companyNames_saved');
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    function persistSavedNames() {
+        localStorage.setItem('companyNames_saved', JSON.stringify(savedNames));
+    }
+
+    function generateName() {
+        const bank = wordBanks[currentIndustry];
+        const rand = Math.random();
+        let name = '';
+        
+        if (rand < 0.3) {
+            const prefix = bank.prefixes[Math.floor(Math.random() * bank.prefixes.length)];
+            const root = bank.roots[Math.floor(Math.random() * bank.roots.length)];
+            name = prefix + root;
+        } else if (rand < 0.6) {
+            const root = bank.roots[Math.floor(Math.random() * bank.roots.length)];
+            const suffix = bank.suffixes[Math.floor(Math.random() * bank.suffixes.length)];
+            name = root + ' ' + suffix;
+        } else if (rand < 0.9) {
+            const prefix = bank.prefixes[Math.floor(Math.random() * bank.prefixes.length)];
+            const suffix = bank.suffixes[Math.floor(Math.random() * bank.suffixes.length)];
+            name = prefix + ' ' + suffix;
+        } else {
+            name = bank.roots[Math.floor(Math.random() * bank.roots.length)];
+        }
+        
+        if (Math.random() < 0.15 && !name.startsWith('The ')) {
+            name = 'The ' + name;
+        }
+        return name;
+    }
+
+    function updateNameDisplay() {
+        companyNameEl.textContent = currentName;
+        const cleanName = currentName.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const encodedName = encodeURIComponent(cleanName);
+        const baseUrl = 'https://www.namecheap.com/domains/registration/results/';
+        const affParam = NAMECHEAP_AFF_ID ? `?aff=${NAMECHEAP_AFF_ID}` : '';
+        
+        domainLink.href = `${baseUrl}${affParam}&query=${encodedName}.com`;
+        domainLinkIo.href = `${baseUrl}${affParam}&query=${encodedName}.io`;
+        domainLinkAi.href = `${baseUrl}${affParam}&query=${encodedName}.ai`;
+    }
+
+    function generateAndSetNewName() {
+        currentName = generateName();
+        updateNameDisplay();
+    }
+
+    function saveCurrentName() {
+        if (savedNames.includes(currentName)) {
+            showTemporaryMessage('⚠️ Already saved!', '#f59e0b');
+            return;
+        }
+        savedNames.unshift(currentName);
+        if (savedNames.length > 20) savedNames.pop();
+        persistSavedNames();
+        renderSavedNames();
+        showTemporaryMessage('✓ Saved!', '#10b981');
+    }
+
+    function showTemporaryMessage(message, color) {
+        const originalText = generateBtn.textContent;
+        const originalBg = generateBtn.style.background;
+        generateBtn.textContent = message;
+        generateBtn.style.background = color;
+        setTimeout(() => {
+            generateBtn.textContent = originalText;
+            generateBtn.style.background = originalBg;
+        }, 1500);
+    }
+
+    async function copyToClipboard() {
+        try {
+            await navigator.clipboard.writeText(currentName);
+            showTemporaryMessage('📋 Copied!', '#10b981');
+        } catch {
+            showTemporaryMessage('❌ Failed', '#ef4444');
+        }
+    }
+
+    function renderSavedNames() {
+        if (savedNames.length === 0) {
+            savedNamesListEl.innerHTML = '<div class="empty-saved">No saved names yet. Click "Save" on a name you like!</div>';
+            return;
+        }
+        savedNamesListEl.innerHTML = '';
+        savedNames.forEach((name) => {
+            const div = document.createElement('div');
+            div.className = 'saved-item';
+            div.innerHTML = `
+                <span class="saved-name-text">${escapeHtml(name)}</span>
+                <button class="remove-saved" data-name="${escapeHtml(name)}">✕</button>
+            `;
+            savedNamesListEl.appendChild(div);
+        });
+        document.querySelectorAll('.remove-saved').forEach(btn => {
+            btn.addEventListener('click', () => removeSavedName(btn.getAttribute('data-name')));
+        });
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function removeSavedName(nameToRemove) {
+        savedNames = savedNames.filter(n => n !== nameToRemove);
+        persistSavedNames();
+        renderSavedNames();
+        showTemporaryMessage('🗑️ Removed', '#ef4444');
+    }
+
+    function clearAllSaved() {
+        if (savedNames.length > 0 && confirm('Remove all saved names?')) {
+            savedNames = [];
+            persistSavedNames();
+            renderSavedNames();
+            showTemporaryMessage('Cleared', '#f59e0b');
+        }
+    }
+
+    function setIndustry(industry) {
+        currentIndustry = industry;
+        document.querySelectorAll('.industry-btn').forEach(btn => {
+            if (btn.getAttribute('data-industry') === industry) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        generateAndSetNewName();
+    }
+
+    // ========== SIDE MENU FUNCTIONS ==========
+    const sideMenu = document.getElementById('sideMenu');
+    const overlayBg = document.getElementById('overlayBg');
+    const menuToggle = document.getElementById('menuToggle');
+    const closeMenu = document.getElementById('closeMenu');
+    const closeMenuBottom = document.getElementById('closeMenuBottom');
+
+    function openSideMenu() {
+        sideMenu.classList.add('open');
+        overlayBg.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSideMenu() {
+        sideMenu.classList.remove('open');
+        overlayBg.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', openSideMenu);
+    closeMenu.addEventListener('click', closeSideMenu);
+    if (closeMenuBottom) closeMenuBottom.addEventListener('click', closeSideMenu);
+    overlayBg.addEventListener('click', closeSideMenu);
+
+    // ========== PAGE CONTENT MODALS ==========
+    function showModal(title, content) {
+        const modalHtml = `
+            <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:2000; display:flex; align-items:center; justify-content:center;">
+                <div style="background:white; max-width:500px; width:90%; border-radius:1rem; padding:1.5rem;">
+                    <h3 style="margin-bottom:1rem;">${title}</h3>
+                    <p style="margin-bottom:1rem; line-height:1.5;">${content}</p>
+                    <button style="background:#667eea; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem; cursor:pointer;" onclick="this.closest('div').parentElement.remove()">Close</button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    document.getElementById('contactLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showModal('Contact Us', '📧 Email: hello@mybusinessname.com<br>🐦 Twitter: @mybusinessname<br>📱 Phone: (555) 123-4567<br><br>Response time: 24-48 hours');
+        closeSideMenu();
+    });
+    document.getElementById('aboutLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showModal('About mybusinessname.com', 'We help entrepreneurs find the perfect business name. Our AI-powered generator creates unique, brandable names across multiple industries. Start your business journey with us today!');
+        closeSideMenu();
+    });
+    document.getElementById('privacyLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showModal('Privacy Policy', 'We collect only saved names (stored locally) and anonymized usage data. No personal information is sold. Cookies are used for analytics and preferences. See our full policy for details.');
+        closeSideMenu();
+    });
+    document.getElementById('termsLink')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showModal('Terms of Use', 'This tool is for inspiration only. Always perform trademark checks before using a name. Affiliate links support this free service. We are not liable for trademark conflicts or domain availability changes.');
+        closeSideMenu();
+    });
+
+    // Footer links
+    const footerIds = ['footerContact', 'footerAbout', 'footerPrivacy', 'footerTerms'];
+    footerIds.forEach(id => {
+        document.getElementById(id)?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const map = {
+                footerContact: 'Contact Us',
+                footerAbout: 'About mybusinessname.com',
+                footerPrivacy: 'Privacy Policy',
+                footerTerms: 'Terms of Use'
+            };
+            const contentMap = {
+                footerContact: '📧 Email: hello@mybusinessname.com<br>🐦 Twitter: @mybusinessname',
+                footerAbout: 'Free company name generator trusted by thousands of entrepreneurs.',
+                footerPrivacy: 'Your data stays in your browser. We use cookies for analytics only.',
+                footerTerms: 'Names generated are suggestions. Always verify trademarks and domain availability.'
+            };
+            showModal(map[id], contentMap[id]);
+        });
+    });
+
+    // ========== COOKIE NOTICE ==========
+    const cookieNotice = document.getElementById('cookieNotice');
+    const acceptCookies = document.getElementById('acceptCookies');
+    const declineCookies = document.getElementById('declineCookies');
+    const cookieSettings = document.getElementById('cookieSettings');
+
+    function setCookieConsent(accepted) {
+        localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
+        cookieNotice.classList.remove('show');
+    }
+
+    if (!localStorage.getItem('cookieConsent')) {
+        setTimeout(() => cookieNotice.classList.add('show'), 500);
+    }
+
+    acceptCookies?.addEventListener('click', () => setCookieConsent(true));
+    declineCookies?.addEventListener('click', () => setCookieConsent(false));
+    cookieSettings?.addEventListener('click', () => {
+        showModal('Cookie Preferences', 'Essential cookies are always on. Marketing and analytics cookies are optional. You can change preferences anytime in your browser settings.');
+    });
+
+    // ========== EVENT LISTENERS ==========
+    generateBtn.addEventListener('click', generateAndSetNewName);
+    saveBtn.addEventListener('click', saveCurrentName);
+    copyBtn.addEventListener('click', copyToClipboard);
+    clearSavedBtn.addEventListener('click', clearAllSaved);
+    document.querySelectorAll('.industry-btn').forEach(btn => {
+        btn.addEventListener('click', () => setIndustry(btn.getAttribute('data-industry')));
+    });
+
+    renderSavedNames();
+    updateNameDisplay();
+</script>
+</body>
+</html>
